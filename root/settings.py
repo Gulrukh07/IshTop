@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     # DRF
     'rest_framework',
     'drf_spectacular',
-    'drf_spectacular_sidecar',
+    'drf_spectacular_sidecar'
+    
     # My apps
     'authentication',
 

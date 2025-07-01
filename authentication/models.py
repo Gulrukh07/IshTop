@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager, AbstractUser
-from django.db.models import CharField, DecimalField, DateTimeField, ImageField
+from django.db.models import CharField, DecimalField, DateTimeField, ImageField, Model, ForeignKey, CASCADE, SET_NULL
 from django.db.models.enums import TextChoices
 
 
@@ -49,9 +49,25 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(phone_number, password, **extra_fields)
 
-class Employer(AbstractUser):
+
+class Region(Model):
+    name = CharField(max_length=50)
+
+class District(Model):
+    name = CharField(max_length=50)
+    region = ForeignKey(Region, CASCADE,related_name='districts')
+
+
+class User(AbstractUser):
+    class RoleType(TextChoices):
+        EMPLOYER = 'employer', 'Employer'
+        ADMIN = 'admin', 'Admin'
+        WORKER = 'worker', 'Worker'
     phone_number = CharField(max_length=15)
+    role = CharField(max_length=50, choices=RoleType.choices)
+    password = CharField(max_length=128)
     balance = DecimalField(decimal_places=0, max_digits=20)
+    avatar = ImageField(null=True, blank=True)
     registered_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
@@ -61,25 +77,18 @@ class Employer(AbstractUser):
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
 
-class Worker(AbstractUser):
+class WorkerAdditional(User):
     class Gender(TextChoices):
         MALE = 'male',"Male"
         FEMALE = "female","Female"
-    phone_number = CharField(max_length=15)
-    balance = DecimalField(decimal_places=0, max_digits=20)
-    registered_at = DateTimeField(auto_now_add=True)
-    updated_at = DateTimeField(auto_now=True)
+    user = ForeignKey(User, on_delete=SET_NULL, null=True)
     gender = CharField(max_length=10, choices=Gender.choices)
-    image = ImageField(upload_to="images/workers", null=True, blank=True)
     passport_seria = CharField(max_length=2)
-    passport_id = CharField(max_length=7)
+    passport_number = CharField(max_length=7)
+    region = ForeignKey(Region, SET_NULL, null=True,blank=True, related_name='workers')
 
 
 
-    username = None
-    email = None
-    UserManager = CustomUserManager()
-    USERNAME_FIELD = "phone_number"
-    REQUIRED_FIELDS = []
+
 
 

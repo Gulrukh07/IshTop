@@ -1,15 +1,15 @@
 from rest_framework.serializers import ModelSerializer
 
-from authentication.models import Worker, Employer
+from authentication.models import WorkerAdditional, User
 
 
-class EmployerSerializer(ModelSerializer):
+class UserSerializer(ModelSerializer):
     class Meta:
-        model = Employer
-        fields = 'first_name', 'last_name', 'phone_number',
+        model = User
+        fields = 'first_name', 'last_name', 'phone_number', 'password', 'role', 'avatar'
 
 
-class WorkerSerializer(ModelSerializer):
+class WorkerAdditionalSerializer(ModelSerializer):
     class Meta:
-        model = Worker
-        fields = 'first_name', 'last_name', 'phone_number', 'gender', 'image', 'passport_seria', 'passport_number',
+        model = WorkerAdditional
+        fields = 'gender', 'passport_seria', 'passport_number', 'user_id', 'region_id',

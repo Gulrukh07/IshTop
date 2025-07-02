@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from authentication.models import WorkerAdditional, User
+from authenticate.models import WorkerAdditional, User
 
 
 class UserSerializer(ModelSerializer):

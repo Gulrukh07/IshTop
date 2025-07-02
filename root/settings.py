@@ -19,6 +19,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'authenticate.User'
 
 
 INSTALLED_APPS = [
@@ -31,10 +32,14 @@ INSTALLED_APPS = [
     # DRF
     'rest_framework',
     'drf_spectacular',
-    'drf_spectacular_sidecar'
-    
+    'drf_spectacular_sidecar',
+
+    #3 party
+    'ckeditor',
+    'ckeditor_uploader',
     # My apps
-    'authentication',
+    'authenticate',
+    'apps'
 
 ]
 
@@ -136,6 +141,8 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True, # Media file uchun
 }
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 if settings.DEBUG:
     urlpatterns  += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

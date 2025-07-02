@@ -63,21 +63,23 @@ class User(AbstractUser):
         EMPLOYER = 'employer', 'Employer'
         ADMIN = 'admin', 'Admin'
         WORKER = 'worker', 'Worker'
-    phone_number = CharField(max_length=15)
+    phone_number = CharField(max_length=15, unique=True)
     role = CharField(max_length=50, choices=RoleType.choices)
     password = CharField(max_length=128)
     balance = DecimalField(decimal_places=0, max_digits=20)
-    avatar = ImageField(null=True, blank=True)
+    avatar = ImageField(upload_to='users/%Y/%m/%d',null=True, blank=True)
     registered_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
     username = None
     email = None
-    UserManager = CustomUserManager()
+    objects = CustomUserManager()
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
 
-class WorkerAdditional(User):
+class WorkerAdditional(Model):
+    class Meta:
+        unique_together = ("passport_seria", "passport_number")
     class Gender(TextChoices):
         MALE = 'male',"Male"
         FEMALE = "female","Female"

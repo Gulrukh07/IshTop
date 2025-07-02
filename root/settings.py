@@ -4,15 +4,8 @@ from pathlib import Path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from root.urls import urlpatterns
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-qfx8wodevr(je7fdc@@&y*lg243fk=!f60=skta1vov$)oh@&%'
 
 DEBUG = True
@@ -20,7 +13,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'authenticate.User'
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,7 +26,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
 
-    #3 party
+    # 3 party
     'ckeditor',
     'ckeditor_uploader',
     # My apps
@@ -113,37 +105,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
-
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'IshTop API',
     'DESCRIPTION': 'description',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    'COMPONENT_SPLIT_REQUEST': True, # Media file uchun
-}
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
-
-
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'IshTop API',
-    'DESCRIPTION': 'description',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-    'COMPONENT_SPLIT_REQUEST': True, # Media file uchun
+    'COMPONENT_SPLIT_REQUEST': True,  # Media file uchun
 }
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
-
-if settings.DEBUG:
-    urlpatterns  += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -5,12 +5,7 @@ from rest_framework.generics import CreateAPIView
 from authenticate.serializers import UserSerializer
 
 
-@extend_schema(tags=['user'], request=UserSerializer, responses={201: UserSerializer},
-               examples=[OpenApiExample('Example User Creation', value={
-                   'fullname': 'John Doe',
-                   'phone': '1276358167',
-                   'avatar': 'example.jpg'
-               }, request_only=True)])
+@extend_schema(tags=['user'], request=UserSerializer, responses={201: UserSerializer})
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserSerializer
 

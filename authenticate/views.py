@@ -1,5 +1,4 @@
-from django.db import transaction
-from drf_spectacular.utils import extend_schema, OpenApiExample
+from drf_spectacular.utils import extend_schema
 from rest_framework.generics import CreateAPIView
 
 from authenticate.serializers import UserSerializer
@@ -9,6 +8,4 @@ from authenticate.serializers import UserSerializer
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserSerializer
 
-    @transaction.atomic
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+

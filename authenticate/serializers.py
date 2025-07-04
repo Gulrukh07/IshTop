@@ -9,17 +9,21 @@ from authenticate.models import WorkerAdditional, User
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = 'first_name', 'last_name', 'phone_number', 'password', 'role', 'avatar'
+        fields = 'first_name', 'last_name', 'phone_number', 'password', 'avatar'
+        read_only_fields = 'id', 'role',
 
         def validate_phone_number(self, value):
-            pattern = r'^\+?\d{12,15}$'
+            pattern = r'^\+998(90|91|93|94|95|97|98|99|33|88)\d{7}$'
             if not re.match(pattern, value):
                 raise ValidationError('Phone number must be entered in the format: +999999999999')
 
             queryset = User.objects.filter(phone_number=value)
             if queryset.exists():
-                raise ValidationError('User already exists')
+                raise ValidationError('User already exists.')
             return value
+
+        # def validate_password(self, value):
+
 
 
 class WorkerAdditionalSerializer(ModelSerializer):

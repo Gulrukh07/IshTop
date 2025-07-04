@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-qfx8wodevr(je7fdc@@&y*lg243fk=!f60=skta1vov$)oh@&%
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'authenticate.User'
 
@@ -119,4 +119,3 @@ SPECTACULAR_SETTINGS = {
 }
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
-

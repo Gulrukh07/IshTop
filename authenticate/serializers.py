@@ -12,41 +12,49 @@ class UserSerializer(ModelSerializer):
         fields = 'first_name', 'last_name', 'phone_number', 'password', 'avatar', 'role',
         read_only_fields = 'id',
 
-        def validate_phone_number(self, value):
-            pattern = r'^\+998(90|91|93|94|95|97|98|99|33|88)\d{7}$'
-            if not re.match(pattern, value):
-                raise ValidationError('Phone number must be entered in the format: +999999999999')
+    def validate_phone_number(self, value):
+        phone = re.sub('\D', '', value)
+        pattern = r'^998(90|91|93|94|95|97|98|99|33|88|50)\d{7}$'
 
-            queryset = User.objects.filter(phone_number=value)
-            if queryset.exists():
-                raise ValidationError('User already exists.')
+        if not re.match(pattern, phone):
+            raise ValidationError('Telefon raqami quyidagi formatda bo‘lishi kerak: +998XXXXXXXXX')
 
-            return value
+        queryset = User.objects.filter(phone_number=phone)
+        if queryset.exists():
+            raise ValidationError('Bu telefon raqamli foydalanuvchi allaqachon mavjud.')
+        return phone
 
-        def validate_password(self, value):
-            if len(value) < 6:
-                raise ValidationError('Password must be at least 6 characters long.')
-            if len(value) > 20:
-                raise ValidationError('Password must be at most 20 characters long.')
-            if not re.search(r'\d', value):
-                raise ValidationError('Password must contain at least one digit.')
-            if not re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
-                raise ValidationError('Password must contain at least one special character.')
+    def validate_password(self, value):
+        if len(value) < 4:
+            raise ValidationError('Password must be at least 4 characters long.')
+        if len(value) > 20:
+            raise ValidationError('Password must be at most 20 characters long.')
+        if not re.search(r'\d', value):
+            raise ValidationError('Password must contain at least one digit.')
+        if not re.search(r'[A-Za-z]', value):
+            raise ValidationError('Password must contain at least one letter.')
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
+            raise ValidationError('Password must contain at least one special character.')
 
-            return value
+        return value
+
+    def validate_avatar(self, value):
+        if not value.name.lower().endswith(('.jpg', 'jpeg', 'png')):
+            raise ValidationError('Avatar must be an image.')
+        return value
 
 
 class WorkerAdditionalSerializer(ModelSerializer):
     class Meta:
         model = WorkerAdditional
-        fields = 'gender', 'passport_seria', 'passport_number', 'user_id', 'region_id',
+        fields = 'gender', 'passport_seria', 'passport_number', 'region', 'user',
 
-        def validate_passport_seria(self, value):
-            pattern = r'^(AA|AB|AC|AD)$'
-            if not re.match(pattern, value):
-                raise ValidationError('Invalid passport seria.')
+    def validate_passport_seria(self, value):
+        pattern = r'^(AA|AB|AC|AD)$'
+        if not re.match(pattern, value):
+            raise ValidationError('Invalid passport seria.')
 
-        def validate_passport_number(self, value):
-            pattern = r'^\d{7}$'
-            if not re.match(pattern, value):
-                raise ValidationError('Invalid passport number.')
+    def validate_passport_number(self, value):
+        pattern = r'^\d{7}$'
+        if not re.match(pattern, value):
+            raise ValidationError('Invalid passport number.')

@@ -53,9 +53,10 @@ class CustomUserManager(UserManager):
 class Region(Model):
     name = CharField(max_length=50)
 
+
 class District(Model):
     name = CharField(max_length=50)
-    region = ForeignKey(Region, CASCADE,related_name='districts')
+    region = ForeignKey(Region, CASCADE, related_name='districts')
 
 
 class User(AbstractUser):
@@ -63,11 +64,12 @@ class User(AbstractUser):
         EMPLOYER = 'employer', 'Employer'
         ADMIN = 'admin', 'Admin'
         WORKER = 'worker', 'Worker'
+
     phone_number = CharField(max_length=15, unique=True)
     role = CharField(max_length=50, choices=RoleType.choices)
     password = CharField(max_length=128)
     balance = DecimalField(decimal_places=0, max_digits=20, default=0)
-    avatar = ImageField(upload_to='users/%Y/%m/%d',null=True, blank=True)
+    avatar = ImageField(upload_to='users/%Y/%m/%d', null=True, blank=True)
     registered_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
 
@@ -80,23 +82,21 @@ class User(AbstractUser):
     @property
     def full_name(self):
         return self.first_name + " " + self.last_name
+
     def __str__(self):
         return self.first_name + " " + self.last_name
+
 
 class WorkerAdditional(Model):
     class Meta:
         unique_together = ("passport_seria", "passport_number")
+
     class Gender(TextChoices):
-        MALE = 'male',"Male"
-        FEMALE = "female","Female"
+        MALE = 'male', "Male"
+        FEMALE = "female", "Female"
+
     user = ForeignKey(User, on_delete=SET_NULL, null=True)
     gender = CharField(max_length=10, choices=Gender.choices)
     passport_seria = CharField(max_length=2)
     passport_number = CharField(max_length=7)
-    region = ForeignKey(Region, SET_NULL, null=True,blank=True, related_name='workers')
-
-
-
-
-
-
+    region = ForeignKey(Region, SET_NULL, null=True, blank=True, related_name='workers')

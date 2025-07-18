@@ -3,8 +3,14 @@ import re
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
 
-from authenticate.models import WorkerAdditional, User
+from authenticate.models import WorkerAdditional, User, Region
 
+
+class RegionSerializer(ModelSerializer):
+    class Meta:
+        model = Region
+        fields = '__all__'
+        read_only_fields = ('id',)
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -37,6 +43,11 @@ class UserSerializer(ModelSerializer):
             raise ValidationError('Password must contain at least one special character.')
 
         return value
+    def create(self, validated_data):
+        user = User(phone_number=validated_data['phone_number'])
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
     def validate_avatar(self, value):
         if not value.name.lower().endswith(('.jpg', 'jpeg', 'png')):

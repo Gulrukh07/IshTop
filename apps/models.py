@@ -26,7 +26,7 @@ class Work(Model):
     description = TextField()
     num_workers = IntegerField()
     employer = ForeignKey('authenticate.User', on_delete=CASCADE, related_name='employer_works')
-    worker = ForeignKey('authenticate.User', on_delete=CASCADE, related_name='worker_works')
+    worker = ForeignKey('authenticate.User', on_delete=CASCADE, related_name='worker_works', null=True)
     status = CharField(max_length=120, choices=OrderStatus.choices, default=OrderStatus.NEW)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)

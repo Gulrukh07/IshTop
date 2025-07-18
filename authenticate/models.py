@@ -51,7 +51,7 @@ class CustomUserManager(UserManager):
 
 
 class Region(Model):
-    name = CharField(max_length=50)
+    name = CharField(max_length=50  )
 
 
 class District(Model):
@@ -67,7 +67,6 @@ class User(AbstractUser):
 
     phone_number = CharField(max_length=15, unique=True)
     role = CharField(max_length=50, choices=RoleType.choices)
-    password = CharField(max_length=128)
     balance = DecimalField(decimal_places=0, max_digits=20, default=0)
     avatar = ImageField(upload_to='users/%Y/%m/%d', null=True, blank=True)
     registered_at = DateTimeField(auto_now_add=True)

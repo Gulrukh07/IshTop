@@ -1,3 +1,4 @@
+from datetime import timedelta
 from os.path import join
 from pathlib import Path
 
@@ -25,10 +26,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'drf_spectacular_sidecar',
+    'rest_framework_simplejwt',
 
-    # 3 party
-    'ckeditor',
-    'ckeditor_uploader',
     # My apps
     'authenticate',
     'apps'
@@ -105,9 +104,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+
 }
 
 SPECTACULAR_SETTINGS = {
@@ -118,4 +121,7 @@ SPECTACULAR_SETTINGS = {
     'COMPONENT_SPLIT_REQUEST': True,  # Media file uchun
 }
 
-CKEDITOR_UPLOAD_PATH = "uploads/"
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=20),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}

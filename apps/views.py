@@ -2,9 +2,9 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from apps.models import Work
+from apps.models import Work, Region, District
 from apps.permissions import CustomerPermission
-from apps.serializers import WorkModelSerializer
+from apps.serializers import WorkModelSerializer, RegionSerializer, DistrictSerializer
 
 
 # Create your views here.
@@ -17,8 +17,6 @@ class WorkCreateApi(CreateAPIView):
     def perform_create(self, serializer):
 
         serializer.save(employer = self.request.user)
-
-
 
 
 @extend_schema(tags=['Work'])
@@ -37,6 +35,12 @@ class EmployerWorksListApi(ListAPIView):
 
     def get_queryset(self):
         employer_id = self.kwargs.get('employer_id')
-        return super().get_queryset().filter(employer=employer_id)
+        return super().get_queryset().filter(employer=employer_id).order_by('-created_at')
+
+
+@extend_schema(tags=['Region'])
+class RegionListAPiView(ListAPIView):
+    queryset = Region.objects.all()
+    serializer_class = DistrictSerializer
 
 

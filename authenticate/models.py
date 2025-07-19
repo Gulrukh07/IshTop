@@ -3,6 +3,8 @@ from django.contrib.auth.models import UserManager, AbstractUser
 from django.db.models import CharField, DecimalField, DateTimeField, ImageField, Model, ForeignKey, CASCADE, SET_NULL
 from django.db.models.enums import TextChoices
 
+from apps.models import Region
+
 
 class CustomUserManager(UserManager):
     def create_superuser(self, phone_number, password=None, **extra_fields):
@@ -48,15 +50,6 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(phone_number, password, **extra_fields)
-
-
-class Region(Model):
-    name = CharField(max_length=50  )
-
-
-class District(Model):
-    name = CharField(max_length=50)
-    region = ForeignKey(Region, CASCADE, related_name='districts')
 
 
 class User(AbstractUser):

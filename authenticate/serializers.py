@@ -6,11 +6,6 @@ from rest_framework.serializers import ModelSerializer
 from authenticate.models import WorkerAdditional, User, Region
 
 
-class RegionSerializer(ModelSerializer):
-    class Meta:
-        model = Region
-        fields = '__all__'
-        read_only_fields = ('id',)
 
 class UserSerializer(ModelSerializer):
     class Meta:

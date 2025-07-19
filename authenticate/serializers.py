@@ -1,7 +1,8 @@
 import re
 
 from rest_framework.exceptions import ValidationError
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import CharField
+from rest_framework.serializers import ModelSerializer, Serializer
 
 from authenticate.models import WorkerAdditional, User, Region
 
@@ -10,7 +11,8 @@ class RegionSerializer(ModelSerializer):
     class Meta:
         model = Region
         fields = '__all__'
-        read_only_fields = ('id',)
+        read_only_fields = 'id',
+
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -43,16 +45,36 @@ class UserSerializer(ModelSerializer):
             raise ValidationError('Password must contain at least one special character.')
 
         return value
+
+    def validate_avatar(self, value):
+        if value and not value.name.lower().endswith(('.jpg', 'jpeg', 'png')):
+            raise ValidationError('Avatar must be an image.')
+        return value
+
     def create(self, validated_data):
-        user = User(phone_number=validated_data['phone_number'])
-        user.set_password(validated_data['password'])
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
         user.save()
         return user
 
-    def validate_avatar(self, value):
-        if not value.name.lower().endswith(('.jpg', 'jpeg', 'png')):
-            raise ValidationError('Avatar must be an image.')
-        return value
+
+class UserUpdateSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = 'first_name', 'last_name', 'phone_number', 'avatar',
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+
+class ChangePasswordSerializer(Serializer):
+    old_password = CharField(write_only=True, required=True)
+    new_password = CharField(write_only=True, required=True)
+    confirm_password = CharField(write_only=True, required=True)
 
 
 class WorkerAdditionalSerializer(ModelSerializer):

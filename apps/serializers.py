@@ -4,8 +4,6 @@ from rest_framework.serializers import ModelSerializer
 
 from apps.models import Category, Work, Rating
 from apps.models import Region, District
-from apps.models import Region
-from authenticate.serializers import RegionSerializer
 from authenticate.serializers import UserSerializer
 
 

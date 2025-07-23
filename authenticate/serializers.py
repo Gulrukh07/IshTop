@@ -4,14 +4,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import CharField
 from rest_framework.serializers import ModelSerializer, Serializer
 
-from authenticate.models import WorkerAdditional, User, Region
-
-
-class RegionSerializer(ModelSerializer):
-    class Meta:
-        model = Region
-        fields = '__all__'
-        read_only_fields = 'id',
+from authenticate.models import WorkerAdditional, User
 
 
 class UserSerializer(ModelSerializer):

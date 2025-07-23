@@ -11,12 +11,14 @@ class Category(Model):
     def __str__(self):
         return self.name
 
+
 class Region(Model):
-    name = CharField(max_length=50  )
+    name = CharField(max_length=50)
+
 
 class District(Model):
     name = CharField(max_length=50)
-    region = ForeignKey('apps.Region', CASCADE,related_name='districts')
+    region = ForeignKey('apps.Region', CASCADE, related_name='districts')
 
 
 class Work(Model):

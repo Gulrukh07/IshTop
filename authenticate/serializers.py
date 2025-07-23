@@ -69,17 +69,30 @@ class ChangePasswordSerializer(Serializer):
     new_password = CharField(write_only=True, required=True)
     confirm_password = CharField(write_only=True, required=True)
 
-    def validate(self, value):
-        if len(value) < 4:
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise ValidationError('Old password must be at least 4 characters long.')
+        return value
+
+    def validate(self, attrs):
+        new_password = attrs.get('old_password')
+        confirm_password = attrs.get('new_password')
+
+        if new_password != confirm_password:
+            raise ValidationError('Old password and new password must match.')
+        if len(new_password) < 4:
             raise ValidationError('Password must be at least 4 characters long.')
-        if len(value) > 20:
+        if len(new_password) > 20:
             raise ValidationError('Password must be at most 20 characters long.')
-        if not re.search(r'\d', value):
+        if not re.search(r'\d', new_password):
             raise ValidationError('Password must contain at least one digit.')
-        if not re.search(r'[A-Za-z]', value):
+        if not re.search(r'[A-Za-z]', new_password):
             raise ValidationError('Password must contain at least one letter.')
-        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', new_password):
             raise ValidationError('Password must contain at least one special character.')
+
+        return attrs
 
 
 class WorkerAdditionalSerializer(ModelSerializer):

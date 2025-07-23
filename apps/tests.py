@@ -163,4 +163,15 @@ class TestWork:
         response = api_client.get(url)
         assert response.status_code == 200
 
+    @pytest.mark.django_db
+    def test_work_update(self,api_client:APIClient):
+        login_url = 'http://127.0.0.1:8000/api/v1/login'
+        response = api_client.post(login_url , data={"phone_number": +998997174716 , "password":1})
+        assert response.status_code == 200
+        assert "access" in response.json().keys()
+        access_token = response.json().get('access')
+        url = 'http://127.0.0.1:8000/api/v1/work-update/1'
+        response = api_client.get(url, headers={"Authorization": f"Bearer {access_token}"})
+        assert response.status_code == 200
+
 

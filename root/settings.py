@@ -30,7 +30,12 @@ INSTALLED_APPS = [
 
     # My apps
     'authenticate',
-    'apps'
+    'apps',
+    'chat',
+
+    # Websocket
+    'channels',
+
 
 ]
 
@@ -62,6 +67,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'root.wsgi.application'
 WSGI_APPLICATION = 'root.wsgi.application'
 
 DATABASES = {
@@ -124,4 +130,14 @@ SPECTACULAR_SETTINGS = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=20),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}
+
+#------------------------- WebSocket  ------------------------------
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
 }

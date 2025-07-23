@@ -18,6 +18,11 @@ class RegionSerializer(ModelSerializer):
         fields = '__all__'
         read_only_fields = ('id',)
 
+class DistrictModelSerializer(ModelSerializer):
+    class Meta:
+        model = District
+        fields = '__all__'
+
 class DistrictSerializer(ModelSerializer):
     class Meta:
         model = District
@@ -52,3 +57,14 @@ class WorkModelSerializer(ModelSerializer):
             raise ValidationError(_("Ishchilar soni faqat raqamalardan iborat musbat son bo'lsin"))
 
         return value
+
+class WorkSerializer(ModelSerializer):
+    class Meta:
+        model = Work
+        fields = 'name', 'status', 'num_workers', 'description', 'category', 'latitude','longitude', 'district',
+
+        def to_representation(self, instance):
+            data = super().to_representation(instance)
+            data['category'] = CategorySerializer(instance.category).data if instance.category else None
+            data['district'] = DistrictSerializer(instance.district).data if instance.district else None
+            return data

@@ -46,3 +46,4 @@ class WorkerAdditionalCreateAPIView(CreateAPIView):
     serializer_class = WorkerAdditionalSerializer
     queryset = WorkerAdditional.objects.all()
     permission_classes = [WorkerPermission]
+

@@ -102,3 +102,58 @@ class TestAuth:
             password="@smth2",
             role="employer"
         )
+
+    def test_worker_additional_create(api_client, db):
+        region = Region.objects.create(name="Andijon")
+        user = User.objects.create_user(
+            first_name="Worker",
+            last_name="Test",
+            phone_number="+998911234567",
+            password="Test@1234",
+            role=User.RoleType.WORKER
+        )
+        api_client.force_authenticate(user=user)
+
+        url = '/api/v1/create-worker-additional'
+        data = {
+            "gender": "male",
+            "passport_seria": "AA",
+            "passport_number": "1234567",
+            "region": region.id,
+            "user": user.id
+        }
+
+        response = api_client.post(url, data)
+        assert response.status_code == 201
+        assert response.data['passport_number'] == "1234567"
+
+    def test_update_user(api_client, db):
+        user = User.objects.create_user(
+            first_name="Ali",
+            last_name="Valiyev",
+            phone_number="+998901234567",
+            password="Pa$$word1!",
+            role=User.RoleType.EMPLOYER
+        )
+        url = f'/api/v1/update-user/{user.id}'
+        data = {
+            "first_name": "AliUpdated",
+            "last_name": "Valiyev",
+            "phone_number": "+998901234567"
+        }
+        response = api_client.patch(url, data)
+        assert response.status_code == 200
+        assert response.data['first_name'] == "AliUpdated"
+
+    def test_retrieve_user(api_client, db):
+        user = User.objects.create_user(
+            first_name="Ali",
+            last_name="Valiyev",
+            phone_number="+998901234567",
+            password="Pa$$word1!",
+            role=User.RoleType.EMPLOYER
+        )
+        url = f'/api/v1/retrieve-user/{user.id}'
+        response = api_client.get(url)
+        assert response.status_code == 200
+        assert response.data['first_name'] == "Ali"

@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager, AbstractUser
-from django.db.models import CharField, DecimalField, DateTimeField, ImageField, Model, ForeignKey, SET_NULL
+from django.db.models import CharField, DecimalField, DateTimeField, ImageField, Model, ForeignKey, SET_NULL, \
+    OneToOneField
 from django.db.models.enums import TextChoices
 
 from apps.models import Region, District
@@ -87,7 +88,7 @@ class WorkerAdditional(Model):
         MALE = 'male', "Male"
         FEMALE = "female", "Female"
 
-    user = ForeignKey(User, on_delete=SET_NULL, null=True)
+    user = OneToOneField(User, on_delete=SET_NULL, null=True, related_name="workeradditional")
     gender = CharField(max_length=10, choices=Gender.choices)
     passport_seria = CharField(max_length=2)
     passport_number = CharField(max_length=7)

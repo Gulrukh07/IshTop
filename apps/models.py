@@ -63,6 +63,11 @@ class Rating(Model):
         return self.stars
 
 
+class RatingImages(Model):
+    image = ImageField(upload_to='rating_images', null=True, blank=True)
+    rating = ForeignKey('apps.Rating', on_delete=CASCADE, related_name='images')
+
+
 class Image(Model):
     work = ForeignKey('apps.Work', on_delete=CASCADE, related_name='images')
     image = ImageField(upload_to='work/images/%Y/%m/%d')

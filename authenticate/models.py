@@ -1,9 +1,9 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager, AbstractUser
-from django.db.models import CharField, DecimalField, DateTimeField, ImageField, Model, ForeignKey, CASCADE, SET_NULL
+from django.db.models import CharField, DecimalField, DateTimeField, ImageField, Model, ForeignKey, SET_NULL
 from django.db.models.enums import TextChoices
 
-from apps.models import Region
+from apps.models import Region, District
 
 
 class CustomUserManager(UserManager):
@@ -91,4 +91,4 @@ class WorkerAdditional(Model):
     gender = CharField(max_length=10, choices=Gender.choices)
     passport_seria = CharField(max_length=2)
     passport_number = CharField(max_length=7)
-    region = ForeignKey(Region, SET_NULL, null=True, blank=True, related_name='workers')
+    district = ForeignKey('apps.District', SET_NULL, null=True, blank=True, related_name='workers')

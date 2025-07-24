@@ -7,9 +7,9 @@ from django.urls import reverse
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIClient
 
-from apps.models import District
-from authenticate.models import User
-from authenticate.serializers import UserUpdateSerializer
+from apps.models import District, Region
+from authenticate.models import User, WorkerAdditional
+from authenticate.serializers import UserUpdateSerializer, WorkerAdditionalSerializer, WorkerAdditionalUpdateSerializer
 
 
 class TestAuth:
@@ -40,7 +40,7 @@ class TestAuth:
 
     @pytest.mark.django_db
     def test_create_user(self, api_client):
-        url = 'http://localhost:8000/api/v1/create-user'
+        url = '/api/v1/create-user'
         response = api_client.post(url, data={
             "first_name": "Ali",
             "last_name": "Aliyev",
@@ -54,7 +54,7 @@ class TestAuth:
 
     @pytest.mark.django_db
     def test_invalid_phone_number(self, api_client):
-        url = 'http://localhost:8000/api/v1/create-user'
+        url = '/api/v1/create-user'
         response = api_client.post(url, data={
             "first_name": "Ali",
             "last_name": "Aliyev",
@@ -68,7 +68,7 @@ class TestAuth:
 
     @pytest.mark.django_db
     def test_invalid_password(self, api_client):
-        url = 'http://localhost:8000/api/v1/create-user'
+        url = '/api/v1/create-user'
         response = api_client.post(url, data={
             "first_name": "Ali",
             "last_name": "Aliyev",
@@ -82,7 +82,7 @@ class TestAuth:
 
     @pytest.mark.django_db
     def test_invalid_avatar(self, api_client):
-        url = 'http://localhost:8000/api/v1/create-user'
+        url = '/api/v1/create-user'
         file = SimpleUploadedFile('avatar.txt', b'file_content', content_type='text/plain')
         response = api_client.post(url, data={
             "first_name": "Ali",
@@ -192,15 +192,75 @@ class TestAuth:
         self.user.set_password("user_old_password")
         self.user.save()
 
-        response = api_client.post(url, data=data, format='json')
+        response = api_client.put(url, data=data, format='json')
         assert response.status_code == 200
 
         self.user.refresh_from_db()
         assert self.user.check_password("Newpass123")
 
+    @pytest.mark.django_db
+    def test_change_password_wrong_old(self, api_client):
+        api_client.force_authenticate(user=self.user)
+        url = reverse('auth:change-password', kwargs={'pk': self.user.pk})
+
+        self.user.set_password("correct_old")
+        self.user.save()
+
+        data = {
+            "old_password": "wrong_old",
+            "new_password": "Newpass123",
+            "confirm_password": "Newpass123"
+        }
+
+        response = api_client.put(url, data=data, format='json')
+        assert response.status_code == 400
+        assert "old_password" in response.data or "non_field_errors" in response.data
+
+    @pytest.mark.django_db
+    def test_change_password_mismatch_confirm(self, api_client):
+        api_client.force_authenticate(user=self.user)
+        url = reverse('auth:change-password', kwargs={'pk': self.user.pk})
+
+        self.user.set_password("correct_old")
+        self.user.save()
+
+        data = {
+            "old_password": "correct_old",
+            "new_password": "Newpass123",
+            "confirm_password": "WrongConfirm"
+        }
+
+        response = api_client.put(url, data=data, format='json')
+        assert response.status_code == 400
+        assert "non_field_errors" in response.data
+
+    @pytest.mark.django_db
+    def test_retrieve_user(self, api_client):
+        user = User.objects.create_user(
+            first_name="Ali",
+            last_name="Valiyev",
+            phone_number="+998901234567",
+            password="Pa$$word1!",
+            role=User.RoleType.EMPLOYER
+        )
+        api_client.force_authenticate(user=user)
+        url = f'/api/v1/user-detail/{user.id}'
+        response = api_client.get(url)
+        assert response.status_code == 200
+        assert response.data['first_name'] == "Ali"
+
+    @pytest.mark.django_db
     def test_worker_additional_create(self, api_client):
-        url = 'http://localhost:8000/api/v1/create-additional-info'
-        district = District.objects.create(name="Toshkent")
+        url = '/api/v1/create-additional-info'
+        user = User.objects.create_user(
+            phone_number="+998971234561",
+            password="Test123",
+            first_name="John",
+            last_name="Doe",
+            role='worker',
+        )
+        region = Region.objects.create(name="Toshkent")
+        district = District.objects.create(name="Yunusobod", region=region)
         data = {
             "gender": "male",
             "passport_seria": "AA",
@@ -213,15 +273,85 @@ class TestAuth:
         assert response.status_code == 201
         assert response.data['passport_number'] == "1234567"
 
-    # def test_retrieve_user(api_client, db):
-    #     user = User.objects.create_user(
-    #         first_name="Ali",
-    #         last_name="Valiyev",
-    #         phone_number="+998901234567",
-    #         password="Pa$$word1!",
-    #         role=User.RoleType.EMPLOYER
-    #     )
-    #     url = f'/api/v1/retrieve-user/{user.id}'
-    #     response = api_client.get(url)
-    #     assert response.status_code == 200
-    #     assert response.data['first_name'] == "Ali"
+    @pytest.mark.django_db
+    def test_worker_additional_valid_data(self):
+        user = User.objects.create_user(
+            first_name="Ali",
+            last_name="Valiyev",
+            phone_number="+998901234567",
+            password="Pa$$word1!",
+            role=User.RoleType.WORKER
+        )
+        region = Region.objects.create(name="Toshkent")
+        district = District.objects.create(name="Chilonzor", region=region)
+
+        valid_data = {
+            "gender": "male",
+            "passport_seria": "AA",
+            "passport_number": "1234567",
+            "district": district.id,
+            "user": user.id
+        }
+        serializer = WorkerAdditionalSerializer(data=valid_data)
+        assert serializer.is_valid(), serializer.errors
+
+    @pytest.mark.django_db
+    def test_invalid_passport_seria(self):
+        data = {
+            "gender": "male",
+            "passport_seria": "ZZ",
+            "passport_number": "1234567",
+            "district": 1,
+            "user": 1
+        }
+        serializer = WorkerAdditionalSerializer(data=data)
+        assert not serializer.is_valid()
+        assert "passport_seria" in serializer.errors
+
+    @pytest.mark.django_db
+    def test_invalid_passport_number(self):
+        data = {
+            "gender": "male",
+            "passport_seria": "AA",
+            "passport_number": "123",  # noto‘g‘ri
+            "district": 1,
+            "user": 1
+        }
+        serializer = WorkerAdditionalSerializer(data=data)
+        assert not serializer.is_valid()
+        assert "passport_number" in serializer.errors
+
+    @pytest.mark.django_db
+    def test_update_work_additional(self, api_client):
+        user = User.objects.create_user(
+            first_name="Ali",
+            last_name="Valiyev",
+            phone_number="+998901234567",
+            password="Pa$$word1!",
+            role=User.RoleType.WORKER
+        )
+        region = Region.objects.create(name="Toshkent")
+        district1 = District.objects.create(name="Yakkasaroy", region=region)
+        district2 = District.objects.create(name="Chilonzor", region=region)
+
+        worker_additional = WorkerAdditional.objects.create(
+            user=user,
+            gender='male',
+            passport_seria='AA',
+            passport_number='1234567',
+            district=district1
+        )
+
+        data = {
+            'district': district2.id
+        }
+        serializer = WorkerAdditionalUpdateSerializer(
+            instance=worker_additional,
+            data=data,
+            partial=True
+        )
+
+        assert serializer.is_valid(), serializer.errors
+        updated_instance = serializer.save()
+
+        assert updated_instance.district == district2

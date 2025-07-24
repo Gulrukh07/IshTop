@@ -5,6 +5,6 @@ from authenticate.models import User
 
 class WorkerPermission(BasePermission):
     def has_permission(self, request, view):
-        if request.user.role != User.RoleType.EMPLOYER:
+        if not request.user.is_authenticated:
             return True
-        return False
+        return request.user.role != User.RoleType.EMPLOYER

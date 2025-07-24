@@ -22,11 +22,10 @@ class UserRetrieveAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
 
-@extend_schema(tags=['user'], request=UserSerializer, responses={200: UserSerializer})
+@extend_schema(tags=['user'], request=UserUpdateSerializer, responses={200: UserSerializer})
 class UserUpdateAPIView(UpdateAPIView):
     serializer_class = UserUpdateSerializer
     queryset = User.objects.all()
-    lookup_field = 'pk'
     permission_classes = [IsAuthenticated]
 
 

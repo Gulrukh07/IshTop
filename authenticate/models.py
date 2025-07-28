@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager, AbstractUser
-from django.db.models import CharField, DecimalField, DateTimeField, ImageField, Model, ForeignKey, CASCADE, SET_NULL
+from django.db.models import CharField, DecimalField, DateTimeField, ImageField, Model, ForeignKey, SET_NULL
 from django.db.models.enums import TextChoices
 
 from apps.models import Region

@@ -10,11 +10,12 @@ class UserModelSerializer(ModelSerializer):
         model = User
         fields = 'id', 'first_name', 'last_name',
 
+
 class ChatModelSerializer(ModelSerializer):
     class Meta:
         model = Chat
-        fields =  'content', 'receiver'
-        read_only_fields = ('id', 'created_at', 'updated_at','sender', 'receiver', 'work')
+        fields = 'content', 'receiver'
+        read_only_fields = ('id', 'created_at', 'updated_at', 'sender', 'receiver', 'work')
 
     def validate_receiver(self, value):
         sender_id = self.context.get('sender_id', None)

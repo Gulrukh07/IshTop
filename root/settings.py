@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     # Websocket
     'channels',
 
-
 ]
 
 MIDDLEWARE = [
@@ -132,7 +131,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
 }
 
-#------------------------- WebSocket  ------------------------------
+# ------------------------- WebSocket  ------------------------------
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',

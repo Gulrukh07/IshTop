@@ -2,8 +2,9 @@ import json
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.contrib.auth.models import User
 
+from apps.models import Work
+from authenticate.models import User
 from chat.models import Chat
 
 
@@ -33,14 +34,17 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         message = data['message']
         sender_id = self.scope['url_route']['kwargs']['sender']
         receiver_id = self.scope['url_route']['kwargs']['receiver']
+        work_id = self.scope['url_route']['kwargs']['work']
 
         # Save message to database
         sender = await sync_to_async(User.objects.get)(id=sender_id)
         receiver = await sync_to_async(User.objects.get)(id=receiver_id)
+        work = await sync_to_async(Work.objects.get)(id=work_id)
         await sync_to_async(Chat.objects.create)(
             sender=sender,
             receiver=receiver,
-            content=message
+            content=message,
+            work=work,
         )
 
         # Send message to room group

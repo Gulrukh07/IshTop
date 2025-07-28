@@ -2,9 +2,10 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from apps.models import Work, Region
+from apps.models import Work, Region, District
 from apps.permissions import CustomerPermission
-from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerializer
+from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerializer, \
+    RegionModelSerializer
 
 
 # Create your views here.
@@ -12,11 +13,10 @@ from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerial
 class WorkCreateApi(CreateAPIView):
     queryset = Work
     serializer_class = WorkModelSerializer
-    permission_classes = [IsAuthenticated,CustomerPermission]
+    permission_classes = [IsAuthenticated, CustomerPermission]
 
     def perform_create(self, serializer):
-
-        serializer.save(employer = self.request.user)
+        serializer.save(employer=self.request.user)
 
 
 @extend_schema(tags=['Work'])
@@ -25,8 +25,9 @@ class LatestWorkListApi(ListAPIView):
     serializer_class = WorkModelSerializer
 
     def get_queryset(self):
-        query = super().get_queryset().filter(worker = None).order_by('-created_at')
+        query = super().get_queryset().filter(worker=None).order_by('-created_at')
         return query
+
 
 @extend_schema(tags=['Work'])
 class EmployerWorksListApi(ListAPIView):
@@ -38,15 +39,25 @@ class EmployerWorksListApi(ListAPIView):
         return super().get_queryset().filter(employer=employer_id).order_by('-created_at')
 
 
-@extend_schema(tags=['Region'])
-class RegionListAPiView(ListAPIView):
-    queryset = Region.objects.all()
-    serializer_class = DistrictSerializer
-
 @extend_schema(tags=['Work'])
 class WorkUpdateApi(UpdateAPIView):
-    permission_classes = [IsAuthenticated,CustomerPermission]
+    permission_classes = [IsAuthenticated, CustomerPermission]
     queryset = Work
     serializer_class = WorkSerializer
 
 
+@extend_schema(tags=['Region'])
+class RegionListAPiView(ListAPIView):
+    queryset = Region.objects.all()
+    serializer_class = RegionModelSerializer
+
+
+@extend_schema(tags=['District'])
+class DistrictListAPiView(ListAPIView):
+    queryset = District.objects.all()
+    serializer_class = DistrictSerializer
+
+    def get_queryset(self):
+        query = super().get_queryset()
+        region = self.kwargs.get('region_pk')
+        return query.filter(region=region)

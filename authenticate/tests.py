@@ -313,7 +313,7 @@ class TestAuth:
         data = {
             "gender": "male",
             "passport_seria": "AA",
-            "passport_number": "123",  # noto‘g‘ri
+            "passport_number": "123",
             "district": 1,
             "user": 1
         }

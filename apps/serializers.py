@@ -1,5 +1,6 @@
 from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
+from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
 from apps.models import Work, Category, Region, District
@@ -61,10 +62,15 @@ class WorkModelSerializer(ModelSerializer):
 class WorkSerializer(ModelSerializer):
     class Meta:
         model = Work
-        fields = 'name', 'status', 'num_workers', 'description', 'category', 'latitude','longitude', 'district',
+        fields = 'name', 'status', 'num_workers', 'description', 'category', 'latitude','longitude', 'district', 'price'
+        read_only_fields = ('id','status')
 
-        def to_representation(self, instance):
-            data = super().to_representation(instance)
-            data['category'] = CategorySerializer(instance.category).data if instance.category else None
-            data['district'] = DistrictSerializer(instance.district).data if instance.district else None
-            return data
+    district = PrimaryKeyRelatedField(queryset=District.objects.all(), required=True)
+    category = PrimaryKeyRelatedField(queryset=Category.objects.all(), required=True)
+
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['category'] = CategorySerializer(instance.category).data if instance.category else None
+        data['district'] = DistrictSerializer(instance.district).data if instance.district else None
+        return data

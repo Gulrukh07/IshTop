@@ -350,10 +350,6 @@ class TestWork:
         assert response4.status_code == 200
         assert response4.json().get("district")["id"] == district.pk
 
-        # response5 = api_client.patch(url, data={"status": Work.OrderStatus.COMPLETED}, format='json')
-        # assert response5.status_code == 200
-        # assert response5.json().get("status") == Work.OrderStatus.COMPLETED
-
         response6 = api_client.patch(url, data={"num_workers": 5}, format='json')
         assert response6.status_code == 200
         assert response6.json().get("num_workers") == 5

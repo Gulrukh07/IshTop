@@ -15,12 +15,10 @@ class ChatListApiView(ListAPIView):
     serializer_class = ChatModelSerializer
     permission_classes = [IsAuthenticated]
 
-
     def get_queryset(self):
         query = super().get_queryset()
         sender = self.kwargs.get('sender_id')
         receiver = self.kwargs.get('receiver_id')
-        queryset = query.filter(Q(sender=sender, receiver=receiver) | Q(sender=receiver,receiver=sender)).order_by('-created_at')
+        queryset = query.filter(Q(sender=sender, receiver=receiver) | Q(sender=receiver, receiver=sender)).order_by(
+            '-created_at')
         return queryset
-
-

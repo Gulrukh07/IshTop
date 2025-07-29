@@ -93,7 +93,7 @@ class Payment(Model):
         CANCELED = 'canceled', 'Canceled'
         WITHDRAWN = 'withdrawn', 'Withdrawn'
 
-    order = ForeignKey('apps.Order', on_delete=CASCADE, related_name='payments')
+    work = ForeignKey('apps.Work', on_delete=CASCADE, related_name='payments')
     amount = DecimalField(decimal_places=0, max_digits=20)
     status = CharField(max_length=50, choices=Status.choices, default=Status.PENDING)
     created_at = DateTimeField(auto_now_add=True)
@@ -105,3 +105,4 @@ class Message(Model):
     user = ForeignKey('authenticate.User', on_delete=CASCADE, related_name='messages')
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
+

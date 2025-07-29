@@ -43,7 +43,7 @@ class WorkModelSerializer(ModelSerializer):
     class Meta:
         model = Work
         fields = '__all__'
-        read_only_fields = ('id', 'created_at', 'updated_at', 'status', 'worker', 'employer')
+        read_only_fields = ('id', 'created_at', 'updated_at', 'status', 'worker', 'employer',)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

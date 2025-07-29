@@ -3,7 +3,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
-from apps.models import Work, Category, Region, District
+from apps.models import Work, Category, Region, District, Rating
 from authenticate.serializers import UserSerializer
 
 
@@ -78,3 +78,22 @@ class WorkSerializer(ModelSerializer):
         data['category'] = CategorySerializer(instance.category).data if instance.category else None
         data['district'] = DistrictSerializer(instance.district).data if instance.district else None
         return data
+
+
+class RatingModelSerializer(ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = 'stars', 'comment', 'user', 'work',
+        read_only_fields = 'id', 'created_at', 'updated_at', 'user',
+
+
+class RatingUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = 'comment',
+        read_only_fields = 'updated_at',
+
+    def update(self, instance, validated_data):
+        instance.comment = validated_data.get('comment', instance.stars)
+        instance.save()
+        return instance

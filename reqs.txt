@@ -8,6 +8,7 @@ Django==5.2.3
 django-ckeditor==6.7.3
 django-filter==25.1
 django-js-asset==3.1.2
+django-unfold==0.63.0
 djangorestframework==3.16.0
 djangorestframework_simplejwt==5.5.0
 drf-spectacular==0.28.0

@@ -2,13 +2,12 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from apps.models import Work, Region, District, Payment
+from apps.models import Work, Region, District, Rating
 from apps.permissions import CustomerPermission
 from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerializer, \
-    RegionModelSerializer
+    RegionModelSerializer, RatingModelSerializer
 
 
-# Create your views here.
 @extend_schema(tags=['Work'])
 class WorkCreateApi(CreateAPIView):
     queryset = Work
@@ -40,16 +39,6 @@ class EmployerWorksListApi(ListAPIView):
 
 
 @extend_schema(tags=['Work'])
-class WorkerWorksListApi(ListAPIView):
-    queryset = Work.objects.all()
-    serializer_class = WorkModelSerializer
-
-    def get_queryset(self):
-        worker_id = self.kwargs.get('worker_id')
-        return super().get_queryset().filter(worker=worker_id).order_by('-created_at')
-
-
-@extend_schema(tags=['Work'])
 class WorkUpdateApi(UpdateAPIView):
     permission_classes = [IsAuthenticated, CustomerPermission]
     queryset = Work
@@ -72,8 +61,30 @@ class DistrictListAPiView(ListAPIView):
         region = self.kwargs.get('region_pk')
         return query.filter(region=region)
 
-# @extend_schema(tags=['Payment'])
-# class PaymentCreateApi(CreateAPIView):
-#     queryset = Payment.objects.all()
-#     serializer_class =
-#     permission_classes = [IsAuthenticated, CustomerPermission]
+
+@extend_schema(tags=['rating'], request=RatingModelSerializer, responses=RatingModelSerializer)
+class RatingCreateAPIView(CreateAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingModelSerializer
+    permission_classes = [IsAuthenticated, CustomerPermission]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+@extend_schema(tags=['rating'], request=RatingModelSerializer, responses=RatingModelSerializer)
+class RatingEmployerListAPIView(ListAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingModelSerializer
+    permission_classes = [IsAuthenticated, CustomerPermission]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Rating.objects.filter(user=user)
+        return queryset
+
+
+@extend_schema(tags=['rating'], request=RatingModelSerializer, responses=RatingModelSerializer)
+class RatingUpdateAPIView(UpdateAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingModelSerializer

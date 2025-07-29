@@ -6,6 +6,10 @@ from django.utils.translation import gettext as _
 
 
 class Category(Model):
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
+
     name = CharField(max_length=255)
 
     def __str__(self):
@@ -58,6 +62,7 @@ class Rating(Model):
     work = ForeignKey('apps.Work', on_delete=CASCADE, related_name='ratings')
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
+    user = ForeignKey('authenticate.User', on_delete=CASCADE, related_name='ratings')
 
     def __str__(self):
         return self.stars

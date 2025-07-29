@@ -52,7 +52,8 @@ class UserSerializer(ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['workeradditional'] = WorkerAdditionalSerializer(
-            instance.workeradditional).data if hasattr(instance, 'workeradditional') and instance.workeradditional else None
+            instance.workeradditional).data if hasattr(instance,
+                                                       'workeradditional') and instance.workeradditional else None
         return data
 
 

@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from apps.models import Work, Region, District, Rating
 from apps.permissions import CustomerPermission
 from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerializer, \
-    RegionModelSerializer, RatingModelSerializer
+    RegionModelSerializer, RatingModelSerializer, RatingUpdateSerializer
 
 
 @extend_schema(tags=['Work'])
@@ -72,7 +72,7 @@ class DistrictListAPiView(ListAPIView):
         return query.filter(region=region)
 
 
-@extend_schema(tags=['rating'], request=RatingModelSerializer, responses=RatingModelSerializer)
+@extend_schema(tags=['rating'])
 class RatingCreateAPIView(CreateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingModelSerializer
@@ -82,7 +82,7 @@ class RatingCreateAPIView(CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-@extend_schema(tags=['rating'], request=RatingModelSerializer, responses=RatingModelSerializer)
+@extend_schema(tags=['rating'])
 class RatingEmployerListAPIView(ListAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingModelSerializer
@@ -94,10 +94,10 @@ class RatingEmployerListAPIView(ListAPIView):
         return queryset
 
 
-@extend_schema(tags=['rating'], request=RatingModelSerializer, responses=RatingModelSerializer)
+@extend_schema(tags=['rating'])
 class RatingUpdateAPIView(UpdateAPIView):
     queryset = Rating.objects.all()
-    serializer_class = RatingModelSerializer
+    serializer_class = RatingUpdateSerializer
 
 # @extend_schema(tags=['Payment'])
 # class PaymentCreateApi(CreateAPIView):

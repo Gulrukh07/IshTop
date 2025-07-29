@@ -110,4 +110,3 @@ class Message(Model):
     user = ForeignKey('authenticate.User', on_delete=CASCADE, related_name='messages')
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
-

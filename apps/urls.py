@@ -1,8 +1,7 @@
 from django.urls import path
 
 from apps.views import WorkCreateApi, LatestWorkListApi, EmployerWorksListApi, RegionListAPiView, WorkUpdateApi, \
-    RatingEmployerListAPIView, RatingCreateAPIView, RatingUpdateAPIView, DistrictListAPiView, \
-    WorkerWorksListApi
+    RatingEmployerListAPIView, RatingCreateAPIView, RatingUpdateAPIView, DistrictListAPiView, WorkerWorksListApi
 
 urlpatterns = [
     path('work-create', WorkCreateApi.as_view()),

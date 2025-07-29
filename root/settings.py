@@ -16,6 +16,7 @@ ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'authenticate.User'
 
 INSTALLED_APPS = [
+    'unfold',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,4 +141,17 @@ CHANNEL_LAYERS = {
             'hosts': [('127.0.0.1', 6379)],
         },
     },
+}
+
+#------------------------ Admin ----------------------------------
+
+UNFOLD = {
+    "SITE_TITLE": "My Admin Dashboard",
+    "SITE_HEADER": "My Admin Panel",
+    "SHOW_HISTORY": True,
+    "DARK_MODE": True,
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+    }
 }

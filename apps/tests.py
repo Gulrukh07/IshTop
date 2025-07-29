@@ -1,10 +1,9 @@
 from datetime import datetime
 
 import pytest
-
-from apps.models import Work, Category, District
 from rest_framework.test import APIClient
 
+from apps.models import Work, Category, District
 from authenticate.models import User, Region
 
 
@@ -17,8 +16,8 @@ class TestWork:
 
         category = Category.objects.create(id=1,
                                            name="test")
-        region = Region.objects.create(id=1,name="test")
-        district = District.objects.create(name="test",region_id=region.id)
+        region = Region.objects.create(id=1, name="test")
+        district = District.objects.create(name="test", region_id=region.id)
 
         Work.objects.create(name="work1",
                             category=category,
@@ -50,9 +49,9 @@ class TestWork:
         return APIClient()
 
     @pytest.mark.django_db
-    def test_work_create(self, api_client:APIClient):
+    def test_work_create(self, api_client: APIClient):
         login_url = 'http://127.0.0.1:8000/api/v1/login'
-        response = api_client.post(login_url , data={"phone_number": +998997174716 , "password":1})
+        response = api_client.post(login_url, data={"phone_number": +998997174716, "password": 1})
         assert response.status_code == 200
         assert "access" in response.json().keys()
         access_token = response.json().get('access')
@@ -62,77 +61,77 @@ class TestWork:
         district = District.objects.get(pk=1)
         response1 = api_client.post(url, headers={"Authorization": f"Bearer {access_token}"},
                                     data={'category': category.pk,
-                                               'name': 'Work 1',
-                                               'description': 'work description',
-                                               'price': 1000,
-                                               'num_workers': 3,
-                                               'status': Work.OrderStatus.NEW,
-                                               'created_at': datetime.now(),
-                                               'updated_at': datetime.now(),
-                                               'employer': user.pk,
-                                               'latitude': 1234567890,
-                                               'longitude': 1234567890,
-                                               'district': district.pk,
-                                               })
+                                          'name': 'Work 1',
+                                          'description': 'work description',
+                                          'price': 1000,
+                                          'num_workers': 3,
+                                          'status': Work.OrderStatus.NEW,
+                                          'created_at': datetime.now(),
+                                          'updated_at': datetime.now(),
+                                          'employer': user.pk,
+                                          'latitude': 1234567890,
+                                          'longitude': 1234567890,
+                                          'district': district.pk,
+                                          })
         response2 = api_client.post(url, headers={"Authorization": f"Bearer {access_token}"},
                                     data={'category': 1000,
-                                               'name': 'Work 1',
-                                               'description': 'work description',
-                                               'price': 1000,
-                                               'num_workers': 3,
-                                               'status': Work.OrderStatus.NEW,
-                                               'created_at': datetime.now(),
-                                               'updated_at': datetime.now(),
-                                               'employer': user.pk,
-                                               'latitude': 1234567890,
-                                               'longitude': 1234567890,
-                                               'region': district.pk,
-                                               })
-        response3 = api_client.post(url, headers={"Authorization": f"Bearer {access_token}"}, data={'category': category.pk,
-                                               'name': 'Work 1',
-                                               'description': 'work description',
-                                               'price': -1000,
-                                               'num_workers': 3,
-                                               'status': Work.OrderStatus.NEW,
-                                               'created_at': datetime.now(),
-                                               'updated_at': datetime.now(),
-                                               'employer': user.pk,
-                                               'latitude': 1234567890,
-                                               'longitude': 1234567890,
-                                               'region': district.pk,
-                                               })
+                                          'name': 'Work 1',
+                                          'description': 'work description',
+                                          'price': 1000,
+                                          'num_workers': 3,
+                                          'status': Work.OrderStatus.NEW,
+                                          'created_at': datetime.now(),
+                                          'updated_at': datetime.now(),
+                                          'employer': user.pk,
+                                          'latitude': 1234567890,
+                                          'longitude': 1234567890,
+                                          'region': district.pk,
+                                          })
+        response3 = api_client.post(url, headers={"Authorization": f"Bearer {access_token}"},
+                                    data={'category': category.pk,
+                                          'name': 'Work 1',
+                                          'description': 'work description',
+                                          'price': -1000,
+                                          'num_workers': 3,
+                                          'status': Work.OrderStatus.NEW,
+                                          'created_at': datetime.now(),
+                                          'updated_at': datetime.now(),
+                                          'employer': user.pk,
+                                          'latitude': 1234567890,
+                                          'longitude': 1234567890,
+                                          'region': district.pk,
+                                          })
         response4 = api_client.post(url, headers={"Authorization": f"Bearer {access_token}"},
                                     data={'category': category.pk,
-                                               'name': 'Work 1',
-                                               'description': 'work description',
-                                               'price': 1000,
-                                               'num_workers': -3,
-                                               'status': Work.OrderStatus.NEW,
-                                               'created_at': datetime.now(),
-                                               'updated_at': datetime.now(),
-                                               'employer': user.pk,
-                                               'latitude': 1234567890,
-                                               'longitude': 1234567890,
-                                               'district': district.pk,
-                                               })
+                                          'name': 'Work 1',
+                                          'description': 'work description',
+                                          'price': 1000,
+                                          'num_workers': -3,
+                                          'status': Work.OrderStatus.NEW,
+                                          'created_at': datetime.now(),
+                                          'updated_at': datetime.now(),
+                                          'employer': user.pk,
+                                          'latitude': 1234567890,
+                                          'longitude': 1234567890,
+                                          'district': district.pk,
+                                          })
         response5 = api_client.post(url, headers={"Authorization": f"Bearer {access_token}"},
                                     data={'category': category.pk,
-                                               'name': 'Work 1',
-                                               'description': 'work description',
-                                               'price': 1000,
-                                               'num_workers': 3,
-                                               'status': Work.OrderStatus.NEW,
-                                               'created_at': datetime.now(),
-                                               'updated_at': datetime.now(),
-                                               'employer': user.pk,
-                                               'latitude': 1234567890,
-                                               'longitude': 1234567890,
-                                               'district': 5,
-                                               })
-
+                                          'name': 'Work 1',
+                                          'description': 'work description',
+                                          'price': 1000,
+                                          'num_workers': 3,
+                                          'status': Work.OrderStatus.NEW,
+                                          'created_at': datetime.now(),
+                                          'updated_at': datetime.now(),
+                                          'employer': user.pk,
+                                          'latitude': 1234567890,
+                                          'longitude': 1234567890,
+                                          'district': 5,
+                                          })
 
         assert response1.status_code == 201
-        assert response2.status_code ==400
+        assert response2.status_code == 400
         assert response2.json().get('category') == [
             "Invalid pk \"1000\" - object does not exist."
         ]
@@ -150,26 +149,25 @@ class TestWork:
         ]
 
     @pytest.mark.django_db
-    def test_work_latest(self,api_client:APIClient):
+    def test_work_latest(self, api_client: APIClient):
         url = "http://127.0.0.1:8000/api/v1/work-latest"
         response = api_client.get(url)
         assert response.status_code == 200
         assert len(response.json()) == 2
 
-
     @pytest.mark.django_db
-    def test_employer_work(self,api_client:APIClient):
+    def test_employer_work(self, api_client: APIClient):
         url = 'http://127.0.0.1:8000/api/v1/employer-works/1'
         response = api_client.get(url)
         assert response.status_code == 200
 
     @pytest.mark.django_db
-    def test_work_put(self,api_client:APIClient):
+    def test_work_put(self, api_client: APIClient):
         user = User.objects.get(id=1)
         category = Category.objects.get(id=1)
         district = District.objects.get(id=1)
         login_url = 'http://0.0.0.0:8000/api/v1/login'
-        response = api_client.post(login_url , data={"phone_number": +998997174716 , "password":1})
+        response = api_client.post(login_url, data={"phone_number": +998997174716, "password": 1})
         assert response.status_code == 200
         assert "access" in response.json().keys()
         access_token = response.json().get('access')
@@ -186,21 +184,21 @@ class TestWork:
                                               "status": Work.OrderStatus.NEW,
                                               "created_at": datetime.now(),
                                               "updated_at": datetime.now(),
-                                              "district": district.pk,  },
+                                              "district": district.pk, },
                                    headers={"Authorization": f"Bearer {access_token}"}
                                    )
         response3 = api_client.put(url, data={
-                                              "category": category.pk,
-                                              "latitude": 1234567890,
-                                              "longitude": 1234567890,
-                                              "description": "work1",
-                                              "employer": user.pk,
-                                              "price": 1000,
-                                              "num_workers": 3,
-                                              "status": Work.OrderStatus.NEW,
-                                              "created_at": datetime.now(),
-                                              "updated_at": datetime.now(),
-                                              "district": district.pk,  },
+            "category": category.pk,
+            "latitude": 1234567890,
+            "longitude": 1234567890,
+            "description": "work1",
+            "employer": user.pk,
+            "price": 1000,
+            "num_workers": 3,
+            "status": Work.OrderStatus.NEW,
+            "created_at": datetime.now(),
+            "updated_at": datetime.now(),
+            "district": district.pk, },
                                    headers={"Authorization": f"Bearer {access_token}"}
                                    )
         response4 = api_client.put(url, data={"name": "work10",
@@ -213,7 +211,7 @@ class TestWork:
                                               "status": Work.OrderStatus.NEW,
                                               "created_at": datetime.now(),
                                               "updated_at": datetime.now(),
-                                              "district": district.pk,  },
+                                              "district": district.pk, },
                                    headers={"Authorization": f"Bearer {access_token}"}
                                    )
 
@@ -227,7 +225,7 @@ class TestWork:
                                               "status": Work.OrderStatus.NEW,
                                               "created_at": datetime.now(),
                                               "updated_at": datetime.now(),
-                                              "district": district.pk,  },
+                                              "district": district.pk, },
                                    headers={"Authorization": f"Bearer {access_token}"}
                                    )
         response6 = api_client.put(url, data={"name": "work10",
@@ -240,7 +238,7 @@ class TestWork:
                                               "status": Work.OrderStatus.NEW,
                                               "created_at": datetime.now(),
                                               "updated_at": datetime.now(),
-                                              "district": district.pk,  },
+                                              "district": district.pk, },
                                    headers={"Authorization": f"Bearer {access_token}"}
                                    )
         response7 = api_client.put(url, data={"name": "work10",
@@ -253,7 +251,7 @@ class TestWork:
                                               "status": Work.OrderStatus.NEW,
                                               "created_at": datetime.now(),
                                               "updated_at": datetime.now(),
-                                              "district": district.pk,  },
+                                              "district": district.pk, },
                                    headers={"Authorization": f"Bearer {access_token}"}
                                    )
         response9 = api_client.put(url, data={"name": "work10",
@@ -266,36 +264,36 @@ class TestWork:
                                               "status": Work.OrderStatus.NEW,
                                               "created_at": datetime.now(),
                                               "updated_at": datetime.now(),
-                                              "district": district.pk,  },
+                                              "district": district.pk, },
                                    headers={"Authorization": f"Bearer {access_token}"}
                                    )
         response10 = api_client.put(url, data={"name": "work10",
-                                              "category": category.pk,
-                                              "latitude": 1234567890,
-                                              "longitude": 1234567890,
-                                              "description": "work1",
-                                              "employer": user.pk,
-                                              "price": 1000,
-                                              "status": Work.OrderStatus.NEW,
-                                              "created_at": datetime.now(),
-                                              "updated_at": datetime.now(),
-                                              "district": district.pk,  },
-                                   headers={"Authorization": f"Bearer {access_token}"}
-                                   )
+                                               "category": category.pk,
+                                               "latitude": 1234567890,
+                                               "longitude": 1234567890,
+                                               "description": "work1",
+                                               "employer": user.pk,
+                                               "price": 1000,
+                                               "status": Work.OrderStatus.NEW,
+                                               "created_at": datetime.now(),
+                                               "updated_at": datetime.now(),
+                                               "district": district.pk, },
+                                    headers={"Authorization": f"Bearer {access_token}"}
+                                    )
         response11 = api_client.put(url, data={"name": "work10",
-                                              "category": category.pk,
-                                              "latitude": 1234567890,
-                                              "longitude": 1234567890,
-                                              "description": "work1",
-                                              "employer": user.pk,
-                                              "price": 1000,
-                                              "num_workers": 3,
-                                              "status": Work.OrderStatus.NEW,
-                                              "created_at": datetime.now(),
-                                              "updated_at": datetime.now(),
+                                               "category": category.pk,
+                                               "latitude": 1234567890,
+                                               "longitude": 1234567890,
+                                               "description": "work1",
+                                               "employer": user.pk,
+                                               "price": 1000,
+                                               "num_workers": 3,
+                                               "status": Work.OrderStatus.NEW,
+                                               "created_at": datetime.now(),
+                                               "updated_at": datetime.now(),
                                                },
-                                   headers={"Authorization": f"Bearer {access_token}"}
-                                   )
+                                    headers={"Authorization": f"Bearer {access_token}"}
+                                    )
         assert response1.status_code == 400
         assert response2.status_code == 200
         assert response3.status_code == 400
@@ -317,7 +315,7 @@ class TestWork:
         assert response11.json().get('district') == ['This field is required.']
 
     @pytest.mark.django_db
-    def test_work_patch(self,api_client: APIClient):
+    def test_work_patch(self, api_client: APIClient):
         login_url = 'http://0.0.0.0:8000/api/v1/login'
         response = api_client.post(login_url, data={"phone_number": "998997174716", "password": "1"})
         assert response.status_code == 200
@@ -363,8 +361,3 @@ class TestWork:
         response7 = api_client.patch(url, data={"category": new_category.pk}, format='json')
         assert response7.status_code == 200
         assert response7.json().get("category")["id"] == new_category.pk
-
-
-
-
-

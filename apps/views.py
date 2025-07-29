@@ -8,7 +8,6 @@ from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerial
     RegionModelSerializer
 
 
-# Create your views here.
 @extend_schema(tags=['Work'])
 class WorkCreateApi(CreateAPIView):
     queryset = Work

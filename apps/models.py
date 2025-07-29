@@ -6,6 +6,10 @@ from django.utils.translation import gettext as _
 
 
 class Category(Model):
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
+
     name = CharField(max_length=255)
 
     def __str__(self):

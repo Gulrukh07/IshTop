@@ -39,6 +39,16 @@ class EmployerWorksListApi(ListAPIView):
 
 
 @extend_schema(tags=['Work'])
+class WorkerWorksListApi(ListAPIView):
+    queryset = Work.objects.all()
+    serializer_class = WorkModelSerializer
+
+    def get_queryset(self):
+        worker_id = self.kwargs.get('worker_id')
+        return super().get_queryset().filter(worker=worker_id).order_by('-created_at')
+
+
+@extend_schema(tags=['Work'])
 class WorkUpdateApi(UpdateAPIView):
     permission_classes = [IsAuthenticated, CustomerPermission]
     queryset = Work
@@ -88,3 +98,9 @@ class RatingEmployerListAPIView(ListAPIView):
 class RatingUpdateAPIView(UpdateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingModelSerializer
+
+# @extend_schema(tags=['Payment'])
+# class PaymentCreateApi(CreateAPIView):
+#     queryset = Payment.objects.all()
+#     serializer_class =
+#     permission_classes = [IsAuthenticated, CustomerPermission]

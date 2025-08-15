@@ -2,10 +2,10 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from apps.models import Work, Region, District, Rating
+from apps.models import Work, Region, District, Rating, RatingImages
 from apps.permissions import CustomerPermission
 from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerializer, \
-    RegionModelSerializer, RatingModelSerializer, RatingUpdateSerializer
+    RegionModelSerializer, RatingModelSerializer, RatingUpdateSerializer, RatingImagesModelSerializer
 
 
 @extend_schema(tags=['Work'])
@@ -98,9 +98,18 @@ class RatingEmployerListAPIView(ListAPIView):
 class RatingUpdateAPIView(UpdateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingUpdateSerializer
+    permission_classes = [IsAuthenticated, CustomerPermission]
 
-# @extend_schema(tags=['Payment'])
-# class PaymentCreateApi(CreateAPIView):
-#     queryset = Payment.objects.all()
-#     serializer_class =
-#     permission_classes = [IsAuthenticated, CustomerPermission]
+
+@extend_schema(tags=['rating-images'])
+class RatingImagesCreateAPIView(CreateAPIView):
+    queryset = RatingImages.objects.all()
+    serializer_class = RatingImagesModelSerializer
+    permission_classes = [IsAuthenticated, CustomerPermission]
+
+
+@extend_schema(tags=['rating-images'])
+class RatingImagesListAPIView(ListAPIView):
+    queryset = RatingImages.objects.all()
+    serializer_class = RatingImagesModelSerializer
+    permission_classes = [IsAuthenticated, CustomerPermission]

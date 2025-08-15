@@ -3,7 +3,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
-from apps.models import Work, Category, Region, District, Rating
+from apps.models import Work, Category, Region, District, Rating, RatingImages
 from authenticate.serializers import UserSerializer
 
 
@@ -98,3 +98,11 @@ class RatingUpdateSerializer(ModelSerializer):
         instance.comment = validated_data.get('comment', instance.stars)
         instance.save()
         return instance
+
+
+class RatingImagesModelSerializer(ModelSerializer):
+    class Meta:
+        model = RatingImages
+        fields = 'before', 'after', 'rating',
+
+    rating = PrimaryKeyRelatedField(queryset=Rating.objects.all(), required=True)

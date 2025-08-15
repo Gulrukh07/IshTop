@@ -69,7 +69,8 @@ class Rating(Model):
 
 
 class RatingImages(Model):
-    image = ImageField(upload_to='rating_images', null=True, blank=True)
+    before = ImageField(upload_to='rating_images', null=True, blank=True)
+    after = ImageField(upload_to='rating_images', null=True, blank=True)
     rating = ForeignKey('apps.Rating', on_delete=CASCADE, related_name='images')
 
 

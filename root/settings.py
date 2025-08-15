@@ -155,3 +155,7 @@ UNFOLD = {
         "show_all_applications": True,
     }
 }
+
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+

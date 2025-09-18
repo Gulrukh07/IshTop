@@ -5,20 +5,21 @@ from rest_framework.views import APIView
 
 from authenticate.models import User, WorkerAdditional
 from authenticate.permissions import WorkerPermission
-from authenticate.serializers import UserSerializer, WorkerAdditionalSerializer, UserUpdateSerializer, \
+from authenticate.serializers import UserModelSerializer, WorkerAdditionalSerializer, UserUpdateSerializer, \
     ChangePasswordSerializer, WorkerAdditionalUpdateSerializer
 
 
+########################################### USER ###########################################
 @extend_schema(tags=['user'])
 class UserCreateAPIView(CreateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserModelSerializer
     permission_classes = [AllowAny]
     queryset = User.objects.all()
 
 
 @extend_schema(tags=['user'])
 class UserRetrieveAPIView(RetrieveAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserModelSerializer
     queryset = User.objects.all()
     lookup_field = 'pk'
     permission_classes = [IsAuthenticated]
@@ -34,19 +35,20 @@ class UserUpdateAPIView(UpdateAPIView):
 
 @extend_schema(tags=['user'])
 class UserListAPIView(ListAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserModelSerializer
     queryset = User.objects.all()
     permission_classes = [IsAdminUser]
 
 
 @extend_schema(tags=['user'])
 class UserDeleteAPIView(APIView):
-    serializer_class = UserSerializer
+    serializer_class = UserModelSerializer
     queryset = User.objects.all()
     permission_classes = [IsAdminUser]
     lookup_field = 'pk'
 
 
+########################################### PASSWORD ###########################################
 @extend_schema(tags=['change-passwd'])
 class ChangePasswordAPIView(UpdateAPIView):
     serializer_class = ChangePasswordSerializer
@@ -55,6 +57,7 @@ class ChangePasswordAPIView(UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
 
+########################################### USER-ADDITIONAL ###########################################
 @extend_schema(tags=['user-additional'])
 class WorkerAdditionalCreateAPIView(CreateAPIView):
     serializer_class = WorkerAdditionalSerializer

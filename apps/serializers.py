@@ -4,7 +4,7 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
 from apps.models import Work, Category, Region, District, Rating, RatingImages
-from authenticate.serializers import UserSerializer
+from authenticate.serializers import UserModelSerializer
 
 
 class CategorySerializer(ModelSerializer):

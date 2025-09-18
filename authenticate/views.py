@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, ListAPIView, DestroyAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 from authenticate.models import User, WorkerAdditional
 from authenticate.permissions import WorkerPermission
@@ -21,14 +21,12 @@ class UserRetrieveAPIView(RetrieveAPIView):
     serializer_class = UserModelSerializer
     queryset = User.objects.all()
     lookup_field = 'pk'
-    permission_classes = [IsAuthenticated]
 
 
 @extend_schema(tags=['user'])
 class UserUpdateAPIView(UpdateAPIView):
     serializer_class = UserUpdateSerializer
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
 
 
@@ -53,7 +51,6 @@ class ChangePasswordAPIView(UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     queryset = User.objects.all()
     lookup_field = 'pk'
-    permission_classes = [IsAuthenticated]
 
 
 ########################################### USER-ADDITIONAL ###########################################
@@ -69,4 +66,3 @@ class WorkerAdditionalUpdateAPIView(UpdateAPIView):
     serializer_class = WorkerAdditionalUpdateSerializer
     queryset = WorkerAdditional.objects.all()
     lookup_field = 'pk'
-    permission_classes = [IsAuthenticated]

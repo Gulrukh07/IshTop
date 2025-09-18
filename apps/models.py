@@ -2,6 +2,7 @@ from ckeditor.fields import RichTextField
 from django.db.models import Model, ForeignKey, SET_NULL, ImageField, CharField, DecimalField, TextField, IntegerField, \
     CASCADE, DateTimeField
 from django.db.models.enums import TextChoices
+from django.db.models.fields import BooleanField
 from django.utils.translation import gettext as _
 
 
@@ -62,7 +63,8 @@ class Rating(Model):
     work = ForeignKey('apps.Work', on_delete=CASCADE, related_name='ratings')
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
-    user = ForeignKey('authenticate.User', on_delete=CASCADE, related_name='ratings', null=True)
+    user = ForeignKey('authenticate.User', on_delete=CASCADE, related_name='ratings')
+    is_edited = BooleanField(default=False)
 
     def __str__(self):
         return self.stars

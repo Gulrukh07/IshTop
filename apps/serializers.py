@@ -49,8 +49,7 @@ class WorkModelSerializer(ModelSerializer):
         data = super().to_representation(instance)
         data['category'] = CategorySerializer(instance.category).data if instance.category else None
         data['district'] = DistrictSerializer(instance.district).data if instance.district else None
-        data['employer'] = UserSerializer(instance.employer).data if instance.employer else None
-        data['ratings'] = RatingModelSerializer(instance.ratings.all(), many=True).data
+        data['employer'] = UserModelSerializer(instance.employer).data if instance.employer else None
         return data
 
     def validate_price(self, value):
@@ -84,18 +83,24 @@ class WorkSerializer(ModelSerializer):
 class RatingModelSerializer(ModelSerializer):
     class Meta:
         model = Rating
-        fields = 'stars', 'comment', 'user', 'work',
+        fields = ('stars', 'comment', 'user', 'work',)
         read_only_fields = 'id', 'created_at', 'updated_at', 'user',
 
 
 class RatingUpdateSerializer(ModelSerializer):
     class Meta:
         model = Rating
-        fields = 'comment',
-        read_only_fields = 'updated_at',
+        fields = ('comment', 'is_edited')
+        read_only_fields = ('updated_at', 'is_edited')
 
     def update(self, instance, validated_data):
-        instance.comment = validated_data.get('comment', instance.stars)
+        old_comment = instance.comment
+        new_comment = validated_data.get('comment', old_comment)
+
+        if new_comment != old_comment:
+            instance.is_edited = True
+
+        instance.comment = new_comment
         instance.save()
         return instance
 

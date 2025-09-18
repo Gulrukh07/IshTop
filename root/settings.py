@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     # Websocket
     'channels',
 
-
 ]
 
 MIDDLEWARE = [
@@ -111,7 +110,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -125,7 +124,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'description',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    'COMPONENT_SPLIT_REQUEST': True,  # Media file uchun
+    'COMPONENT_SPLIT_REQUEST': True,
 }
 
 SIMPLE_JWT = {
@@ -133,7 +132,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
 }
 
-#------------------------- WebSocket  ------------------------------
+# ------------------------- WebSocket  ------------------------------
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -143,7 +142,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-#------------------------ Admin ----------------------------------
+# ------------------------ Admin ----------------------------------
 
 UNFOLD = {
     "SITE_TITLE": "My Admin Dashboard",
@@ -156,6 +155,4 @@ UNFOLD = {
     }
 }
 
-
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
-

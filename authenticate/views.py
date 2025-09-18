@@ -1,7 +1,6 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, ListAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
-from rest_framework.views import APIView
 
 from authenticate.models import User, WorkerAdditional
 from authenticate.permissions import WorkerPermission
@@ -41,7 +40,7 @@ class UserListAPIView(ListAPIView):
 
 
 @extend_schema(tags=['user'])
-class UserDeleteAPIView(APIView):
+class UserDeleteAPIView(DestroyAPIView):
     serializer_class = UserModelSerializer
     queryset = User.objects.all()
     permission_classes = [IsAdminUser]

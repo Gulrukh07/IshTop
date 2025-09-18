@@ -12,10 +12,15 @@ urlpatterns = [
     path('user-update/<int:pk>', UserUpdateAPIView.as_view()),
     path('user-delete/<int:pk>', UserDeleteAPIView.as_view()),
     path('users', UserListAPIView.as_view()),
+    path('change-password/<int:pk>', ChangePasswordAPIView.as_view())
+]
+
+urlpatterns += [
     path('create-additional-info', WorkerAdditionalCreateAPIView.as_view()),
-    path('change-password/<int:pk>', ChangePasswordAPIView.as_view(), name='change-password'),
     path('worker-additional-update/<int:pk>', WorkerAdditionalUpdateAPIView.as_view()),
+]
+
+urlpatterns += [
     path('login', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
 ]

@@ -1,5 +1,6 @@
 import re
 
+from django.contrib.auth.hashers import make_password
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import CharField
 from rest_framework.serializers import ModelSerializer, Serializer
@@ -7,11 +8,11 @@ from rest_framework.serializers import ModelSerializer, Serializer
 from authenticate.models import WorkerAdditional, User
 
 
-class UserSerializer(ModelSerializer):
+class UserModelSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = 'first_name', 'last_name', 'phone_number', 'password', 'avatar', 'role',
-        read_only_fields = 'id', 'registered_at', 'updated_at',
+        fields = ('first_name', 'last_name', 'phone_number', 'password', 'avatar', 'role',)
+        read_only_fields = ('id', 'registered_at', 'updated_at',)
 
     def validate_phone_number(self, value):
         phone = re.sub('\D', '', value)
@@ -35,19 +36,12 @@ class UserSerializer(ModelSerializer):
         if not re.search(r'[A-Za-z]', value):
             raise ValidationError('Password must contain at least one letter.')
 
-        return value
+        return make_password(value)
 
     def validate_avatar(self, value):
         if value and not value.name.lower().endswith(('.jpg', 'jpeg', 'png')):
             raise ValidationError('Avatar must be an image.')
         return value
-
-    def create(self, validated_data):
-        password = validated_data.pop('password')
-        user = User(**validated_data)
-        user.set_password(password)
-        user.save()
-        return user
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -57,7 +51,7 @@ class UserSerializer(ModelSerializer):
         return data
 
 
-class UserUpdateSerializer(UserSerializer):
+class UserUpdateSerializer(UserModelSerializer):
     class Meta:
         model = User
         fields = 'first_name', 'last_name', 'avatar',

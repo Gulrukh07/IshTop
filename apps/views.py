@@ -1,6 +1,5 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, RetrieveAPIView
 
 from apps.models import Work, Region, District, Rating, RatingImages
 from apps.permissions import CustomerPermission
@@ -12,7 +11,7 @@ from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerial
 class WorkCreateApi(CreateAPIView):
     queryset = Work
     serializer_class = WorkModelSerializer
-    permission_classes = [IsAuthenticated, CustomerPermission]
+    permission_classes = [CustomerPermission]
 
     def perform_create(self, serializer):
         serializer.save(employer=self.request.user)
@@ -50,8 +49,8 @@ class WorkerWorksListApi(ListAPIView):
 
 @extend_schema(tags=['Work'])
 class WorkUpdateApi(UpdateAPIView):
-    permission_classes = [IsAuthenticated, CustomerPermission]
-    queryset = Work
+    permission_classes = [CustomerPermission]
+    queryset = Work.objects.all()
     serializer_class = WorkSerializer
 
 
@@ -77,7 +76,7 @@ class DistrictListAPiView(ListAPIView):
 class RatingCreateAPIView(CreateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingModelSerializer
-    permission_classes = [IsAuthenticated, CustomerPermission]
+    permission_classes = [CustomerPermission]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -87,7 +86,7 @@ class RatingCreateAPIView(CreateAPIView):
 class RatingEmployerListAPIView(ListAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingModelSerializer
-    permission_classes = [IsAuthenticated, CustomerPermission]
+    permission_classes = [CustomerPermission]
 
     def get_queryset(self):
         user = self.request.user
@@ -99,21 +98,7 @@ class RatingEmployerListAPIView(ListAPIView):
 class RatingUpdateAPIView(UpdateAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingUpdateSerializer
-    permission_classes = [IsAuthenticated, CustomerPermission]
-
-
-@extend_schema(tags=['rating'])
-class RatingDeleteAPIView(DestroyAPIView):
-    queryset = Rating.objects.all()
-    serializer_class = RatingModelSerializer
-    permission_classes = [IsAdminUser]
-
-
-@extend_schema(tags=['rating'])
-class RatingsListAPIView(ListAPIView):
-    queryset = Rating.objects.all()
-    serializer_class = RatingModelSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [CustomerPermission]
 
 
 @extend_schema(tags=['rating'])
@@ -128,23 +113,7 @@ class RatingDetailAPIView(RetrieveAPIView):
 class RatingImagesCreateAPIView(CreateAPIView):
     queryset = RatingImages.objects.all()
     serializer_class = RatingImagesModelSerializer
-    permission_classes = [IsAuthenticated, CustomerPermission]
-
-
-@extend_schema(tags=['rating-images'])
-class RatingImagesUpdateAPIView(UpdateAPIView):
-    queryset = RatingImages.objects.all()
-    serializer_class = RatingImagesModelSerializer
-    permission_classes = [IsAdminUser]
-    lookup_field = 'pk'
-
-
-@extend_schema(tags=['rating-images'])
-class RatingImagesDeleteAPIView(DestroyAPIView):
-    queryset = RatingImages.objects.all()
-    serializer_class = RatingImagesModelSerializer
-    permission_classes = [IsAdminUser]
-    lookup_field = 'pk'
+    permission_classes = [CustomerPermission]
 
 
 @extend_schema(tags=['rating-images'])
@@ -159,4 +128,4 @@ class RatingImagesRetrieveAPIView(RetrieveAPIView):
     queryset = RatingImages.objects.all()
     serializer_class = RatingImagesModelSerializer
     lookup_field = 'pk'
->>>>>>> 88985c8 (updated)
+

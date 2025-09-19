@@ -1,5 +1,10 @@
 from drf_spectacular.utils import extend_schema
+<<<<<<< HEAD
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, RetrieveAPIView
+=======
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAdminUser
+>>>>>>> b3b3e91 (updated)
 
 from apps.models import Work, Region, District, Rating, RatingImages
 from apps.permissions import CustomerPermission
@@ -102,6 +107,23 @@ class RatingUpdateAPIView(UpdateAPIView):
 
 
 @extend_schema(tags=['rating'])
+<<<<<<< HEAD
+=======
+class RatingDeleteAPIView(DestroyAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingModelSerializer
+    permission_classes = [IsAdminUser]
+
+
+@extend_schema(tags=['rating'])
+class RatingsListAPIView(ListAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingModelSerializer
+    permission_classes = [IsAdminUser]
+
+
+@extend_schema(tags=['rating'])
+>>>>>>> b3b3e91 (updated)
 class RatingDetailAPIView(RetrieveAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingModelSerializer
@@ -117,6 +139,22 @@ class RatingImagesCreateAPIView(CreateAPIView):
 
 
 @extend_schema(tags=['rating-images'])
+class RatingImagesUpdateAPIView(UpdateAPIView):
+    queryset = RatingImages.objects.all()
+    serializer_class = RatingImagesModelSerializer
+    permission_classes = [IsAdminUser]
+    lookup_field = 'pk'
+
+
+@extend_schema(tags=['rating-images'])
+class RatingImagesDeleteAPIView(DestroyAPIView):
+    queryset = RatingImages.objects.all()
+    serializer_class = RatingImagesModelSerializer
+    permission_classes = [IsAdminUser]
+    lookup_field = 'pk'
+
+
+@extend_schema(tags=['rating-images'])
 class RatingImagesListAPIView(ListAPIView):
     queryset = RatingImages.objects.all()
     serializer_class = RatingImagesModelSerializer
@@ -128,3 +166,7 @@ class RatingImagesRetrieveAPIView(RetrieveAPIView):
     queryset = RatingImages.objects.all()
     serializer_class = RatingImagesModelSerializer
     lookup_field = 'pk'
+<<<<<<< HEAD
+=======
+>>>>>>> 88985c8 (updated)
+>>>>>>> b3b3e91 (updated)

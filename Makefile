@@ -6,3 +6,6 @@ user:
 
 app:
 	python3 manage.py startapp apps
+
+run:
+	 daphne -b 0.0.0.0 -p 8000 root.asgi:application

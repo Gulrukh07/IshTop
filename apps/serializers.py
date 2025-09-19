@@ -50,6 +50,7 @@ class WorkModelSerializer(ModelSerializer):
         data['category'] = CategorySerializer(instance.category).data if instance.category else None
         data['district'] = DistrictSerializer(instance.district).data if instance.district else None
         data['employer'] = UserSerializer(instance.employer).data if instance.employer else None
+        data['ratings'] = RatingModelSerializer(instance.ratings.all(), many=True).data
         return data
 
     def validate_price(self, value):

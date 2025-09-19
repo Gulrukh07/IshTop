@@ -7,7 +7,7 @@ from authenticate.views import UserCreateAPIView, WorkerAdditionalCreateAPIView,
 app_name = 'auth'
 
 urlpatterns = [
-    path('create-user', UserCreateAPIView.as_view()),
+    path('register', UserCreateAPIView.as_view()),
     path('user-detail/<int:pk>', UserRetrieveAPIView.as_view()),
     path('user-update/<int:pk>', UserUpdateAPIView.as_view(), name='user-update'),
     path('create-additional-info', WorkerAdditionalCreateAPIView.as_view()),

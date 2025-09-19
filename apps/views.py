@@ -1,6 +1,5 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, RetrieveAPIView
 
 from apps.models import Work, Region, District, Rating, RatingImages
 from apps.permissions import CustomerPermission
@@ -51,7 +50,7 @@ class WorkerWorksListApi(ListAPIView):
 @extend_schema(tags=['Work'])
 class WorkUpdateApi(UpdateAPIView):
     permission_classes = [CustomerPermission]
-    queryset = Work
+    queryset = Work.objects.all()
     serializer_class = WorkSerializer
 
 
@@ -103,20 +102,6 @@ class RatingUpdateAPIView(UpdateAPIView):
 
 
 @extend_schema(tags=['rating'])
-class RatingDeleteAPIView(DestroyAPIView):
-    queryset = Rating.objects.all()
-    serializer_class = RatingModelSerializer
-    permission_classes = [IsAdminUser]
-
-
-@extend_schema(tags=['rating'])
-class RatingsListAPIView(ListAPIView):
-    queryset = Rating.objects.all()
-    serializer_class = RatingModelSerializer
-    permission_classes = [IsAdminUser]
-
-
-@extend_schema(tags=['rating'])
 class RatingDetailAPIView(RetrieveAPIView):
     queryset = Rating.objects.all()
     serializer_class = RatingModelSerializer
@@ -129,22 +114,6 @@ class RatingImagesCreateAPIView(CreateAPIView):
     queryset = RatingImages.objects.all()
     serializer_class = RatingImagesModelSerializer
     permission_classes = [CustomerPermission]
-
-
-@extend_schema(tags=['rating-images'])
-class RatingImagesUpdateAPIView(UpdateAPIView):
-    queryset = RatingImages.objects.all()
-    serializer_class = RatingImagesModelSerializer
-    permission_classes = [IsAdminUser]
-    lookup_field = 'pk'
-
-
-@extend_schema(tags=['rating-images'])
-class RatingImagesDeleteAPIView(DestroyAPIView):
-    queryset = RatingImages.objects.all()
-    serializer_class = RatingImagesModelSerializer
-    permission_classes = [IsAdminUser]
-    lookup_field = 'pk'
 
 
 @extend_schema(tags=['rating-images'])

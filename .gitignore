@@ -2,7 +2,8 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
+apps/migrations
+authenticate/migrations
 # C extensions
 *.so
 

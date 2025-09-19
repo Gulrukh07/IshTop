@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, DestroyAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAdminUser
 
 from apps.models import Work, Region, District, Rating, RatingImages
 from apps.permissions import CustomerPermission
@@ -72,6 +72,7 @@ class DistrictListAPiView(ListAPIView):
         return query.filter(region=region)
 
 
+########################################## RATING #######################################
 @extend_schema(tags=['rating'])
 class RatingCreateAPIView(CreateAPIView):
     queryset = Rating.objects.all()
@@ -101,6 +102,28 @@ class RatingUpdateAPIView(UpdateAPIView):
     permission_classes = [CustomerPermission]
 
 
+@extend_schema(tags=['rating'])
+class RatingDeleteAPIView(DestroyAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingModelSerializer
+    permission_classes = [IsAdminUser]
+
+
+@extend_schema(tags=['rating'])
+class RatingsListAPIView(ListAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingModelSerializer
+    permission_classes = [IsAdminUser]
+
+
+@extend_schema(tags=['rating'])
+class RatingDetailAPIView(RetrieveAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingModelSerializer
+    lookup_field = 'pk'
+
+
+########################################## RATING IMAGES #######################################
 @extend_schema(tags=['rating-images'])
 class RatingImagesCreateAPIView(CreateAPIView):
     queryset = RatingImages.objects.all()
@@ -109,7 +132,30 @@ class RatingImagesCreateAPIView(CreateAPIView):
 
 
 @extend_schema(tags=['rating-images'])
+class RatingImagesUpdateAPIView(UpdateAPIView):
+    queryset = RatingImages.objects.all()
+    serializer_class = RatingImagesModelSerializer
+    permission_classes = [IsAdminUser]
+    lookup_field = 'pk'
+
+
+@extend_schema(tags=['rating-images'])
+class RatingImagesDeleteAPIView(DestroyAPIView):
+    queryset = RatingImages.objects.all()
+    serializer_class = RatingImagesModelSerializer
+    permission_classes = [IsAdminUser]
+    lookup_field = 'pk'
+
+
+@extend_schema(tags=['rating-images'])
 class RatingImagesListAPIView(ListAPIView):
     queryset = RatingImages.objects.all()
     serializer_class = RatingImagesModelSerializer
     permission_classes = [CustomerPermission]
+
+
+@extend_schema(tags=['rating-images'])
+class RatingImagesRetrieveAPIView(RetrieveAPIView):
+    queryset = RatingImages.objects.all()
+    serializer_class = RatingImagesModelSerializer
+    lookup_field = 'pk'

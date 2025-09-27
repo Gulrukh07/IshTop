@@ -1,5 +1,4 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
 *.py[codz]
 *.py[cod]
 *$py.class
@@ -7,6 +6,24 @@ apps/migrations
 authenticate/migrations
 # C extensions
 *.so
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+env/
+
+# Database
+*.sqlite3
+
+# IDE files
+.idea/
+.vscode/
+
 
 # Distribution / packaging
 .Python

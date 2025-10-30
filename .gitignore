@@ -3,3 +3,4 @@
 .env
 apps/migrations
 authenticate/migrations
+chat/migrations

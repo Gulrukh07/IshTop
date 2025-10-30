@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 from os.path import join
 from pathlib import Path
@@ -155,3 +156,21 @@ UNFOLD = {
         "show_all_applications": True,
     }
 }
+
+# ---------------------------- Redis --------------------------------------
+
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")

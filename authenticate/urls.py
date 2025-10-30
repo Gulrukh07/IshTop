@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from authenticate.views import UserCreateAPIView, WorkerAdditionalCreateAPIView, UserRetrieveAPIView, \
-    UserUpdateAPIView, ChangePasswordAPIView, WorkerAdditionalUpdateAPIView
+    UserUpdateAPIView, ChangePasswordAPIView, WorkerAdditionalUpdateAPIView, SendOTPView, VerifyOTPView
 
 app_name = 'auth'
 
@@ -15,5 +15,6 @@ urlpatterns = [
     path('worker-additional-update/<int:pk>', WorkerAdditionalUpdateAPIView.as_view()),
     path('login', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
+    path("send-otp/", SendOTPView.as_view(), name="send-otp"),
+    path("verify-otp/", VerifyOTPView.as_view(), name="verify-otp")
 ]

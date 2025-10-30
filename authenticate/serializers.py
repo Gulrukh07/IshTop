@@ -131,3 +131,10 @@ class WorkerAdditionalUpdateSerializer(ModelSerializer):
         instance.district = validated_data.get('district', instance.district)
         instance.save()
         return instance
+
+class SendOTPSerializer(Serializer):
+    phone = CharField(max_length=15)
+
+class VerifyOTPSerializer(Serializer):
+    phone = CharField(max_length=15)
+    code = CharField(max_length=6)

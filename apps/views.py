@@ -10,7 +10,7 @@ from apps.serializers import WorkModelSerializer, DistrictSerializer, WorkSerial
 
 @extend_schema(tags=['Work'])
 class WorkCreateApi(CreateAPIView):
-    queryset = Work
+    queryset = Work.objects.all()
     serializer_class = WorkModelSerializer
     permission_classes = [IsAuthenticated, CustomerPermission]
 

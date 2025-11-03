@@ -16,6 +16,7 @@ cryptography==45.0.5
 daphne==4.2.1
 Django==5.2.3
 django-ckeditor==6.7.3
+django-cors-headers==4.9.0
 django-filter==25.1
 django-js-asset==3.1.2
 django-redis==6.0.0
@@ -44,6 +45,7 @@ packaging==25.0
 pillow==11.3.0
 pluggy==1.6.0
 propcache==0.4.1
+psycopg2-binary==2.9.11
 pyasn1==0.6.1
 pyasn1_modules==0.4.2
 pycparser==2.22
